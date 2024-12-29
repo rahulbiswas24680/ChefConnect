@@ -1,0 +1,262 @@
+{% extends 'cms/index.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Order</h1>
+    </div>
+
+    <!-- Order Form -->
+    <form>
+
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-12 col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Food Item -->
+                        <div class="mb-3">
+                            <label for="foodItem" class="form-label">Food Item</label>
+                            <select class="selectpicker" id="foodItem" required>
+                                <option selected disabled>Select Food Item</option>
+                                <option value="Pizza Delicious">Pizza Delicious</option>
+                                <option value="Burger Classic">Burger Classic</option>
+                                <option value="Sandwich Delight">Sandwich Delight</option>
+                            </select>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="mb-3">
+                            <div class="row g-3">
+                                <!-- Quantity -->
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" placeholder="Enter quantity"
+                                        required min="1" pattern="\d*"
+                                        oninvalid="this.setCustomValidity('Please enter a valid number greater than 0')"
+                                        oninput="this.setCustomValidity('')">
+                                </div>
+
+                                <!-- Pickup Timing -->
+                                <div class="col-12 col-md-6">
+                                    <label for="pickupTime" class="form-label">Pickup Timing</label>
+                                    <select class="selectpicker" id="pickupTime" required>
+                                        <option selected disabled>Choose a time range</option>
+                                        <option value="10-15 mins">10-15 mins</option>
+                                        <option value="20-30 mins">20-30 mins</option>
+                                        <option value="30-45 mins">30-45 mins</option>
+                                        <option value="1 hour">1 hour</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instructions -->
+                        <div class="mb-3">
+                            <label for="instructions" class="form-label">Special Instructions</label>
+                            <textarea class="form-control" id="instructions" rows="2"
+                                placeholder="Any special instructions (e.g., extra cheese, no olives)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-12 col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="customerName" placeholder="Enter customer name"
+                                required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Customer Email</label>
+                            <input type="email" class="form-control" id="customerEmail" placeholder="Enter email"
+                                required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="customerPhone" placeholder="Enter phone number"
+                                required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Selection -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Select Delivery Location</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="travel-times" class="form-label">Estimated Travel Times</label>
+                            <div id="travel-times" class="border p-2">
+                                <p>Fetching travel times...</p>
+                            </div>
+                        
+                            <label for="location" class="form-label">Select Your Location</label>
+                            <div id="map" style="height: 300px; width: 100%;"></div>
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+                        </div>
+                        <small class="text-muted d-block mt-2">Drag the pin on the map to select the current
+                            location.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Submit Order</button>
+        </div>
+    </form>
+
+</div>
+
+<style>
+    #map {
+    height: 400px;
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#travel-times {
+    background-color: #f8f9fa;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+</style>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const shopLocation = [22.767697, 88.541460]; // Replace with your shop's coordinates
+        let userLocation;
+
+        // Initialize the map
+        const map = L.map('map').setView([0, 0], 16);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker to the map
+        const marker = L.marker([0, 0], { draggable: true }).addTo(map);
+
+        // Get user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    userLocation = [latitude, longitude];
+                    console.log('user location is ', userLocation);
+                    console.log('shop location is ', shopLocation);
+                    // Add a marker for the user
+                    // const userMarker = L.marker(userLocation).addTo(map).bindPopup('My Location').openPopup();
+
+                    // Adjust map view to include both locations
+                    const bounds = L.latLngBounds([shopLocation, userLocation]);
+                    map.fitBounds(bounds);
+
+                    // Add routing from shop to user
+                    L.Routing.control({
+                        waypoints: [L.latLng(shopLocation), L.latLng(userLocation)],
+                        routeWhileDragging: true,
+                        showAlternatives: true,
+                        
+                        createMarker: function (i, waypoint, n) {
+                            const icons = ['📍 Shop', '🚶 You'];
+                            return L.marker(waypoint.latLng).bindPopup(icons[i]);
+                        },
+                    }).addTo(map);
+                    L.control.scale({position: 'bottomright'}).remove();
+                    // Calculate travel times for walking and two-wheeler
+                    calculateTravelTimes(shopLocation, userLocation);
+                },
+                (error) => {
+                    console.error('Geolocation error:', error.message);
+                    alert('Unable to fetch location. Please enable location services.');
+                },
+                // {
+                //     enableHighAccuracy: true, // Request high accuracy
+                //     timeout: 10000,          // Set a timeout (in milliseconds)
+                //     maximumAge: 0            // Disable caching of location
+                // }
+            );
+        } else {
+            alert('Geolocation is not supported by your browser.');
+        }
+
+        // Update latitude and longitude when the marker is dragged
+        marker.on('moveend', (e) => {
+            const { lat, lng } = e.target.getLatLng();
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+        });
+    });
+
+
+    // Function to calculate travel times
+    function calculateTravelTimes(shop, user) {
+        const distance = getDistance(shop[0], shop[1], user[0], user[1]); // Distance in km
+
+        // Average speeds (in km/h)
+        const walkingSpeed = 5;
+        const twoWheelerSpeed = 40;
+
+        // Time = Distance / Speed (in hours)
+        const walkingTime = (distance / walkingSpeed) * 60; // Minutes
+        const twoWheelerTime = (distance / twoWheelerSpeed) * 60; // Minutes
+
+        // Display travel times
+        document.getElementById('travel-times').innerHTML = `
+        <p><strong>Walking:</strong> ${walkingTime.toFixed(2)} minutes</p>
+        <p><strong>Two-wheeler:</strong> ${twoWheelerTime.toFixed(2)} minutes</p>
+    `;
+    }
+
+    // Function to calculate distance between two points (Haversine formula)
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in km
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in km
+    }
+
+
+
+</script>
+
+
+{% endblock content %}

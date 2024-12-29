@@ -1,0 +1,237 @@
+{% extends 'cms/index.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Order Management</h1>
+        <div>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Download All Orders</a>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+                    <a href="{% url 'create-order' %}" class="btn btn-sm btn-outline-secondary shadow-sm"><i class="fas fa-plus fa-sm"></i> Add Order</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Food Item</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Pickup Timing</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Order 1 -->
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Pizza Delicious</td>
+                                    <td>Mark Otto</td>
+                                    <td>
+                                        <span id="pickup-time-1" class="text-muted">Calculating...</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-info">Springfield, IL</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success">Delivered</span>
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
+                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Order 2 -->
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Burger Classic</td>
+                                    <td>Jacob Thornton</td>
+                                    <td>
+                                        <span id="pickup-time-2" class="text-muted">Calculating...</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-info">Chicago, IL</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-warning text-dark">Pending</span>
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
+                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Order 3 -->
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>Sandwich Delight</td>
+                                    <td>Larry Bird</td>
+                                    <td>
+                                        <span id="pickup-time-3" class="text-muted">Calculating...</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-info">New York, NY</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-primary">On the Way</span>
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
+                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
+                                        </a>
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+
+    function updatePickupTimes() {
+        const times = ["2 min", "5 min", "1 min"];
+        document.getElementById("pickup-time-1").innerText = times[0];
+        document.getElementById("pickup-time-2").innerText = times[1];
+        document.getElementById("pickup-time-3").innerText = times[2];
+    }
+
+    // Simulate real-time updates every 2 minutes
+    setInterval(updatePickupTimes, 120000);
+    updatePickupTimes();
+
+
+    var $table = $('#table')
+
+    $(function () {
+        var data = [
+            {
+                'id': 0,
+                'name': 'Item 0',
+                'price': '$0'
+            },
+            {
+                'id': 1,
+                'name': 'Item 1',
+                'price': '$1'
+            },
+            {
+                'id': 2,
+                'name': 'Item 2',
+                'price': '$2'
+            },
+            {
+                'id': 3,
+                'name': 'Item 3',
+                'price': '$3'
+            },
+            {
+                'id': 4,
+                'name': 'Item 4',
+                'price': '$4'
+            },
+            {
+                'id': 5,
+                'name': 'Item 5',
+                'price': '$5'
+            },
+            {
+                'id': 6,
+                'name': 'Item 0',
+                'price': '$0'
+            },
+            {
+                'id': 7,
+                'name': 'Item 1',
+                'price': '$1'
+            },
+            {
+                'id': 8,
+                'name': 'Item 2',
+                'price': '$2'
+            },
+            {
+                'id': 9,
+                'name': 'Item 3',
+                'price': '$3'
+            },
+            {
+                'id': 10,
+                'name': 'Item 4',
+                'price': '$4'
+            },
+            {
+                'id': 11,
+                'name': 'Item 5',
+                'price': '$5'
+            },
+            {
+                'id': 12,
+                'name': 'Item 0',
+                'price': '$0'
+            },
+            {
+                'id': 13,
+                'name': 'Item 1',
+                'price': '$1'
+            },
+            {
+                'id': 14,
+                'name': 'Item 2',
+                'price': '$2'
+            },
+            {
+                'id': 15,
+                'name': 'Item 3',
+                'price': '$3'
+            },
+            {
+                'id': 4,
+                'name': 'Item 4',
+                'price': '$4'
+            },
+            {
+                'id': 5,
+                'name': 'Item 5',
+                'price': '$5'
+            }
+        ]
+        $table.bootstrapTable({ data: data })
+    })
+
+</script>
+
+{% endblock %}
