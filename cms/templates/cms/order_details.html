@@ -4,11 +4,11 @@
 
 <style>
     .map-box {
-        width: 100%;
-        height: 20rem;
-        padding: 10px;
-        border: 5px solid #0f6a6e;
-        background-color: rgb(161, 184, 186);
+        /* width: 100%;
+        height: 20rem; */
+        /* padding: 10px; */
+        /* border: 5px solid #0f6a6e; */
+        /* background-color: rgb(161, 184, 186); */
     }
 </style>
 
@@ -23,12 +23,12 @@
     </div>
 
     <!-- Order Details Section -->
-    <div class="card bg-dark text-white shadow mb-4">
-        <div class="card-body">
-            <div class="row align-items-center">
+    <div class="card bg-light text-white shadow-lg mb-4">
+        <div class="card-body p-4">
+            <div class="row g-4 align-items-center">
                 <!-- Map Box -->
-                <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                    <div class="map-box border rounded shadow-sm" id="map" style="height: 300px;">
+                <div class="col-12 col-lg-6">
+                    <div class="rounded-3 shadow border-2 border border-primary" id="map" style="height: 380px;">
                         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
                         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
                         <script>
@@ -58,16 +58,36 @@
 
                 <!-- Order Summary -->
                 <div class="col-12 col-lg-6">
-                    <div class="border p-4 rounded shadow-sm">
-                        <h4 class="text-warning mb-3">Order Summary</h4>
-                        <p><strong>Order ID:</strong> #{{ order.id }}</p>
-                        <p><strong>Order Date:</strong> {{ order.order_date }}</p>
-                        <p><strong>Delivery Address:</strong> {{ order.location }}</p>
-                        <div class="d-flex justify-content-start">
-                            <p><strong>Status:</strong> <span class="badge badge-success mr-5">{{ order.order_status }}</span></p>
-                            <p><strong>Payment:</strong> <span class="badge badge-success">{{ order.payment_status }}</span></p>
+                    <div class="bg-light text-dark rounded-3 shadow p-4">
+                        <h4 class="fw-bold text-primary mb-4">Order Summary</h4>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <p class="mb-2"><i class="fas fa-hashtag me-2"></i><strong>Order ID:</strong></p>
+                                <p class="text-muted">#{{ order.id }}</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-2"><i class="far fa-calendar-alt me-2"></i><strong>Order Date:</strong></p>
+                                <p class="text-muted">{{ order.order_date }}</p>
+                            </div>
+                            <div class="col-12">
+                                <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i><strong>Delivery Address:</strong></p>
+                                <p class="text-muted">{{ order.location }}</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-2"><i class="fas fa-info-circle me-2"></i><strong>Status:</strong></p>
+                                <span class="badge bg-success">{{ order.order_status }}</span>
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-2"><i class="fas fa-credit-card me-2"></i><strong>Payment:</strong></p>
+                                <span class="badge bg-success">{{ order.payment_status }}</span>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <h5 class="fw-bold text-primary">
+                                    <i class="fas fa-dollar-sign me-2"></i>Total Amount:
+                                    <span class="ms-2">${{ order.total_price }}</span>
+                                </h5>
+                            </div>
                         </div>
-                        <p><strong>Total Amount:</strong> <span class="text-warning">${{ order.total_price }}</span></p>
                     </div>
                 </div>
             </div>
@@ -109,7 +129,7 @@
     <!-- Action Buttons -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mt-4">
         <div class="d-flex flex-wrap">
-            <a href="#" class="btn btn-outline-dark mr-2 mb-2">
+            <a href="#" class="btn btn-outline-dark me-2 mb-2">
                 <i class="fas fa-check"></i> Mark As Paid
             </a>
             <a href="#" class="btn btn-success mb-2">
@@ -117,7 +137,7 @@
             </a>
         </div>
         <div class="d-flex flex-wrap">
-            <a href="{% url 'create-order' %}" class="btn btn-primary mr-2 mb-2">
+            <a href="{% url 'create-order' %}" class="btn btn-primary me-2 mb-2">
                 <i class="fas fa-edit"></i> Edit Order
             </a>
             <a href="#" class="btn btn-danger mb-2">

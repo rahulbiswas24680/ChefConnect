@@ -12,37 +12,43 @@
         </div>
     </div>
 
-    <div id="recipeCarousel" class="carousel slide" data-ride="carousel">
+    <div id="recipeCarousel" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
         <ol class="carousel-indicators">
             {% for recipe in first_recipes %}
-            <li data-target="#recipeCarousel" data-slide-to="{{ forloop.counter }}"
-            {% if forloop.counter == 1 %} class="active"{% endif %}></li>
+            <li data-bs-target="#recipeCarousel" 
+                data-bs-slide-to="{{ forloop.counter0 }}"
+                {% if forloop.counter == 1 %} 
+                    class="active"
+                {% endif %}
+                aria-current="{% if forloop.counter == 1 %}true{% endif %}"
+                aria-label="Slide {{ forloop.counter }}">
+            </li>
             {% endfor %}
         </ol>
-        <div class="carousel-inner" style="height: 20rem;">
+        <div class="carousel-inner">
             {% for recipe in first_recipes %}
-            <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+            <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}" style="max-height: 500px;">
                 <img class="d-block w-100"
                     src="{{  recipe.image.url }}"
-                    alt="{{ recipe.title }}">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>{{ recipe.title }}</h5>
-                    <p>{{ recipe.description }}</p>
+                    alt="{{ recipe.title }}"
+                    style="object-fit: cover; height: 100vh; max-height: 500px;">
+                <div class="carousel-caption d-block bg-dark bg-opacity-75 rounded p-3">
+                    <h3 class="h4 font-weight-bold text-white">{{ recipe.title }}</h3>
+                    <p class="lead text-white d-none d-sm-block">{{ recipe.description }}</p>
+                    <a href="#" class="btn btn-primary mt-2">View Recipe</a>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <a class="carousel-control-prev" href="#recipeCarousel" role="button" data-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#recipeCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#recipeCarousel" role="button" data-slide="next">
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#recipeCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-
-
     <div class="container-fluid">
 
         <section class="pt-5 pb-5">
@@ -51,7 +57,7 @@
                     <div class="col-6">
                         <h3 class="mb-3">New Added Recipes</h3>
                     </div>
-                    <div class="col-6 text-right">
+                    <div class="col-6 text-end">
                         <a class="btn btn-light mb-3 mr-1" href="#carouselnewRecipes" role="button" data-slide="prev">
                             <i class="fa fa-arrow-left"></i>
                         </a>
@@ -67,68 +73,7 @@
                                     <div class="row">
                                         
                                         {% for recipe in new_recipes %}
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card shadow-sm border-0 h-50 h-md-100">
-                                                <img 
-                                                    src="{{ recipe.image.url }}" 
-                                                    alt="{{ recipe.title }}" 
-                                                    class="card-img-top" 
-                                                    style="height: 200px; object-fit: cover;">
-                                        
-                                                <div class="card-body">
-                                                    <h5 class="card-title text-truncate">{{ recipe.title }}</h5>
-                                                    <p class="card-text text-muted small">
-                                                        {{ recipe.description|truncatewords:15 }}
-                                                    </p>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <span class="badge badge-info">Price: ${{ recipe.price }}</span>
-                                                        <span class="badge badge-primary">{{ recipe.category.name }}</span>
-                                                    </div>
-                                                </div>
-                                        
-                                                <div class="card-footer bg-white border-0">
-                                                    <a href="#" class="btn btn-outline-primary btn-sm">
-                                                        View Details
-                                                    </a>
-                                                    <button class="btn btn-secondary btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                
-        
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-5">
-                <div class="row">
-                    <div class="col-6">
-                        <h3 class="mb-3">Popular Recipes</h3>
-                    </div>
-                    <div class="col-6 text-right">
-                        <a class="btn btn-dark mb-3 mr-1" href="#carouselpopularRecipes" role="button" data-slide="prev">
-                            <i class="fa fa-arrow-left"></i>
-                        </a>
-                        <a class="btn btn-dark mb-3 " href="#carouselpopularRecipes" role="button" data-slide="next">
-                            <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <div id="carouselpopularRecipes" class="carousel slide" data-ride="carousel">
-        
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="row">
-                                        {% for recipe in popular_recipes %}
-                                        <div class="col-md-4 mb-3">
+                                        <div class="d-none d-md-block col-md-6 col-xl-3 mb-3 overflow-auto">
                                             <div class="card shadow-sm border-0 h-100">
                                                 <img 
                                                     src="{{ recipe.image.url }}" 
@@ -157,8 +102,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
                                         {% endfor %}
+                                
         
                                     </div>
                                 </div>
@@ -168,9 +113,65 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mb-5">
+                <div class="row">
+                    <div class="col-6">
+                        <h3 class="mb-3">Popular Recipes</h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a class="btn btn-light mb-3 mr-1" href="#carouselpopularRecipes" role="button" data-slide="prev">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                        <a class="btn btn-light mb-3 " href="#carouselpopularRecipes" role="button" data-slide="next">
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="col-12">
+                        <div id="carouselpopularRecipes" class="carousel slide" data-ride="carousel">
+        
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row flex-nowrap overflow-auto">
+                                        {% for recipe in popular_recipes %}
+                                        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                            <div class="card shadow-sm border-0 h-100 mx-2">
+                                                <img 
+                                                    src="{{ recipe.image.url }}" 
+                                                    alt="{{ recipe.title }}" 
+                                                    class="card-img-top" 
+                                                    style="height: 200px; object-fit: cover;">
+                                        
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-truncate">{{ recipe.title }}</h5>
+                                                    <p class="card-text text-muted small">
+                                                        {{ recipe.description|truncatewords:15 }}
+                                                    </p>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="badge badge-info">Price: ${{ recipe.price }}</span>
+                                                        <span class="badge badge-primary">{{ recipe.category.name }}</span>
+                                                    </div>
+                                                </div>
+                                        
+                                                <div class="card-footer bg-white border-0">
+                                                    <a href="#" class="btn btn-outline-primary btn-sm">
+                                                        View Details
+                                                    </a>
+                                                    <a href="#" class="btn btn-secondary btn-sm">
+                                                        <i class="fas fa-edit"></i> Edit Recipe
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
-
-
     </div>
 
 </div>

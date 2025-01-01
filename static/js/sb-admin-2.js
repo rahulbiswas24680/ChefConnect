@@ -54,3 +54,7 @@
   });
 
 })(jQuery); // End of use strict
+
+
+
+console.log('sb-admin-2.js loaded');
