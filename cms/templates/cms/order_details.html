@@ -23,55 +23,88 @@
     </div>
 
     <!-- Order Details Section -->
-    <div class="card shadow-lg mb-4">
+    <div class="card bg-dark text-white shadow mb-4">
         <div class="card-body">
             <div class="row align-items-center">
                 <!-- Map Box -->
                 <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                    <div class="map-box border rounded shadow-sm" style="height: 300px; background-color: #f8f9fa;">
-                        <!-- Replace with actual map if necessary -->
-                        <p class="text-muted text-center my-auto pt-5">Map Placeholder</p>
+                    <div class="map-box border rounded shadow-sm" id="map" style="height: 300px;">
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+                        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                        <script>
+                            var map = L.map('map').setView([51.505, -0.09], 13);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap contributors'
+                            }).addTo(map);
+
+                            // Shop location (example coordinates)
+                            var shopMarker = L.marker([51.505, -0.09]).addTo(map);
+                            shopMarker.bindPopup('Shop Location').openPopup();
+
+                            // Customer address (example coordinates)
+                            var customerMarker = L.marker([51.51, -0.1]).addTo(map);
+                            customerMarker.bindPopup('Delivery Address').openPopup();
+
+                            // Draw route between points
+                            var latlngs = [
+                                [51.505, -0.09],
+                                [51.51, -0.1]
+                            ];
+                            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+                            map.fitBounds(polyline.getBounds());
+                        </script>
                     </div>
                 </div>
 
                 <!-- Order Summary -->
                 <div class="col-12 col-lg-6">
                     <div class="border p-4 rounded shadow-sm">
-                        <h4 class="text-primary mb-3">Order Summary</h4>
-                        <p><strong>Order ID:</strong> #12345</p>
-                        <p><strong>Order Date:</strong> Dec 25, 2024</p>
-                        <p><strong>Delivery Address:</strong> 123 Main Street, Springfield</p>
+                        <h4 class="text-warning mb-3">Order Summary</h4>
+                        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                        <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+                        <p><strong>Delivery Address:</strong> {{ order.location }}</p>
                         <div class="d-flex justify-content-start">
-                            <p><strong>Status:</strong> <span class="badge badge-success mr-5">Delivered</span></p>
-                            <p><strong>Payment:</strong> <span class="badge badge-success">Done</span></p>
+                            <p><strong>Status:</strong> <span class="badge badge-success mr-5">{{ order.order_status }}</span></p>
+                            <p><strong>Payment:</strong> <span class="badge badge-success">{{ order.payment_status }}</span></p>
                         </div>
-                        <p><strong>Total Amount:</strong> <span class="text-primary">$20</span></p>
+                        <p><strong>Total Amount:</strong> <span class="text-warning">${{ order.total_price }}</span></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Order Details Section -->
-    <div class="row">
-        <!-- Product Image -->
-        <div class="col-12 col-md-6 mb-4">
-            <div class="image-container text-center">
-                <img class="img-fluid img-thumbnail rounded" src="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg" alt="Pizza Delicious">
-            </div>
-        </div>
-
-        <!-- Product Information -->
-        <div class="col-12 col-md-6">
-            <div class="p-4 border rounded shadow-sm">
-                <h4 class="text-primary mb-3">Pizza Delicious</h4>
-                <p class="fs-5"><strong>Description:</strong> A mouthwatering pizza topped with fresh mozzarella, tomatoes, and basil.</p>
-                <p class="fs-5"><strong>Price:</strong> <span class="text-primary">$20</span></p>
-                <p class="fs-5"><strong>Quantity:</strong> 1</p>
-                <p class="fs-5"><strong>Instructions:</strong> Extra cheese, no olives.</p>
-            </div>
-        </div>
+    <div class="mt-5 mb-2">
+        <h5 class="text-center">Ordered Items</h5>
     </div>
+
+    {% for item in order.items.all %}
+        <div class="card mb-3 shadow-sm p-3">
+            <div class="row no-gutters">
+                <!-- Product Image -->
+                <div class="col-md-4">
+                    <img class="card-img img-thumbnail rounded" src="{{ item.recipe.image.url }}" alt="{{ item.title }}">
+                </div>
+
+                <!-- Product Information -->
+                <div class="col-md-8">
+                    <div class="card-body mx-md-5 px-md-5">
+                        <h5 class="card-title text-primary">{{ item.title }}</h5>
+                        <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+                        <p class="card-text"><strong>Price:</strong> <span class="text-primary">${{ item.price }}</span></p>
+                        <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }}</p>
+                        <p class="card-text"><strong>Instructions:</strong> 
+                            {{ item.recipe.instructions|safe|truncatewords:"50"|linebreaks }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <!-- Message if no items are found -->
+        <div class="alert alert-warning text-center">
+            No items found in this order.
+        </div>
+    {% endfor %}
 
     <!-- Action Buttons -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mt-4">

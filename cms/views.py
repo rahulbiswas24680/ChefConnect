@@ -1,14 +1,22 @@
 from django.shortcuts import render
-from internal.models import Recipe, Category
+from internal.models import Recipe, Order
 
 def portal_home(request):
     return render(request, 'cms/portal_dashboard.html')
 
 def portal_order_management(request):
-    return render(request, 'cms/portal_order_manage.html')
+    orders = Order.objects.all()
+    context = {
+        'orders': orders
+    }
+    return render(request, 'cms/portal_order_manage.html', context)
 
 def order_details(request, order_id):
-    return render(request, 'cms/order_details.html')
+    order = Order.objects.prefetch_related('items__recipe').get(id=order_id)
+    context = {
+        'order': order
+    }
+    return render(request, 'cms/order_details.html', context)
 
 def create_order(request):
     return render(request, 'cms/order_form.html', context={})

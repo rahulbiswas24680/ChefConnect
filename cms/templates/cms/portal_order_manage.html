@@ -25,86 +25,62 @@
                         <table class="table table-striped align-middle">
                             <thead class="table-primary">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Food Item</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Pickup Timing</th>
-                                    <th scope="col">Location</th>
-                                    <th scope="col">Order Status</th>
+                                    <th scope="col" class="text-truncate text-sm-left d-none d-sm-table-cell">#</th>
+                                    <th scope="col">Order</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Order 1 -->
+                                {% for order in orders %}
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Pizza Delicious</td>
-                                    <td>Mark Otto</td>
+                                    <th scope="row" class="text-truncate text-sm-left d-none d-sm-table-cell">
+                                        <span class="d-block d-sm-none small">#{{ order.id }}</span> <!-- Smaller text for small devices -->
+                                        <span class="d-none d-sm-inline">#{{ order.id }}</span> <!-- Normal text for larger devices -->
+                                    </th>
+                                    
                                     <td>
-                                        <span id="pickup-time-1" class="text-muted">Calculating...</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-info">Springfield, IL</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Delivered</span>
-                                    </td>
-                                    <td class="d-flex justify-content-center">
-                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
-                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <!-- Order 2 -->
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Burger Classic</td>
-                                    <td>Jacob Thornton</td>
-                                    <td>
-                                        <span id="pickup-time-2" class="text-muted">Calculating...</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-info">Chicago, IL</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning text-dark">Pending</span>
-                                    </td>
-                                    <td class="d-flex justify-content-center">
-                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
-                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <!-- Order 3 -->
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Sandwich Delight</td>
-                                    <td>Larry Bird</td>
-                                    <td>
-                                        <span id="pickup-time-3" class="text-muted">Calculating...</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-info">New York, NY</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-primary">On the Way</span>
-                                    </td>
-                                    <td class="d-flex justify-content-center">
-                                        <a href="{% url 'order-details' order_id=3 %}" class="btn btn-sm btn-info mr-2">
-                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
-                                        </a>
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <!-- Customer Name -->
+                                                <span class="fw-bold text-primary">{{ order.customer }}</span>
+                                                
+                                                <!-- Pickup Approximate Time -->
+                                                <small id="pickup-time-1" class="text-muted">
+                                                    <i class="fas fa-clock"></i> {{ order.pickup_approx_time }}
+                                                </small>
+                                            </div>
+                                    
+                                            <!-- Location -->
+                                            <small class="text-info">
+                                                <i class="fas fa-map-marker-alt"></i> {{ order.location }}
+                                            </small>
+                                    
+                                            <!-- Order Status -->
+                                            <span class="w-100 w-md-25 badge badge-pill 
+                                                         {% if order.order_status == 'pending' %}
+                                                             badge-warning
+                                                         {% elif order.order_status == 'completed' %}
+                                                             badge-success
+                                                         {% elif order.order_status == 'cancelled' %}
+                                                             badge-danger
+                                                         {% else %}
+                                                             badge-secondary
+                                                         {% endif %}">
+                                                {{ order.order_status|title }}
+                                            </span>
+                                        </div>
                                     </td>
                                     
+                                    <td class="d-flex justify-content-center">
+                                        <a href="{% url 'order-details' order_id=order.id %}" class="btn btn-sm btn-info mr-2">
+                                            <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">View</span>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
+                                        </a>
+                                    </td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
