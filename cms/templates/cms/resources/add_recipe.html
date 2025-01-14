@@ -1,0 +1,149 @@
+{% extends 'cms/index.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Recipe</h1>
+        <div>
+
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+
+        <section class="pt-2 pb-2">
+            
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h4 class="mb-0">Add Recipe Details</h4>
+                            </div>
+                            <div class="card-body">
+                                <form class="row g-3" method="post" action="{% url 'add-recipe' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    
+                                    <!-- Recipe Title -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="inputTitle" name="title" placeholder="Recipe Title" required>
+                                            <label for="inputTitle">Recipe Title</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slug -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="inputSlug" name="slug" placeholder="Slug">
+                                            <label for="inputSlug">Slug</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="inputPrice" name="price" placeholder="Price in USD" required>
+                                            <label for="inputPrice">Price (USD)</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Discount -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="inputDiscount" name="discount" placeholder="Discount Percentage">
+                                            <label for="inputDiscount">Discount (%)</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Discount Price -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="inputDiscountPrice" name="discount_price" placeholder="Discount Price">
+                                            <label for="inputDiscountPrice">Discount Price (USD)</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Servings -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="inputServings" name="servings" placeholder="Number of Servings">
+                                            <label for="inputServings">Servings</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Categories -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select id="inputCategories" name="categories[]" class="form-select" multiple>
+                                                <option value="1">Breakfast</option>
+                                                <option value="2">Lunch</option>
+                                                <option value="3">Dinner</option>
+                                                <option value="4">Dessert</option>
+                                            </select>
+                                            <label for="inputCategories">Categories</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Description -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="inputDescription" name="description" placeholder="Description" rows="3" style="height: 100px;"></textarea>
+                                            <label for="inputDescription">Description</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Instructions -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="inputInstructions" name="instructions" placeholder="Instructions" rows="4" style="height: 150px;"></textarea>
+                                            <label for="inputInstructions">Instructions</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Recipe Image -->
+                                    <div class="col-12">
+                                        <label for="inputImage" class="form-label">Recipe Image</label>
+                                        <input type="file" class="form-control" id="inputImage" name="image" accept="image/*">
+                                    </div>
+
+                                    <!-- Average Rating -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="inputRating" name="rating" placeholder="Average Rating" step="0.1" min="0" max="5">
+                                            <label for="inputRating">Average Rating (0-5)</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Active Status -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select id="inputActive" name="active" class="form-select">
+                                                <option value="1" selected>Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                            <label for="inputActive">Active Status</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary px-5 py-2">Save Recipe</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            
+        </section>
+    </div>
+
+</div>
+
+{% endblock %}
